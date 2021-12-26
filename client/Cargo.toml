@@ -17,7 +17,7 @@ maintenance = { status = "actively-developed" }
 
 [features]
 multithread = [ "naia-socket-shared/multithread" ]
-wbindgen = [ "naia-socket-shared/wbindgen", "url", "wasm-bindgen", "js-sys", "web_sys", "serde", "serde_derive" ]
+wbindgen = [ "naia-socket-shared/wbindgen", "url", "wasm-bindgen", "js-sys", "web_sys", "serde", "serde_derive", "serde_json" ]
 mquad = [ "naia-socket-shared/mquad", "miniquad" ]
 
 [dependencies]
@@ -25,7 +25,7 @@ log = { version = "0.4" }
 naia-socket-shared = { version = "0.4.1", path = "../shared" }
 cfg-if = "0.1.10"
 url = { version = "2.1.1", optional = true }
-wasm-bindgen = { version = "0.2.45", features = [ "serde-serialize" ], optional = true  }
+wasm-bindgen = { version = "0.2.68", optional = true  }
 js-sys = { version = "0.3", optional = true  }
 web_sys = { version = "0.3.22", package = "web-sys", features = [
     "RtcDataChannel", "RtcDataChannelInit", "RtcDataChannelType",
@@ -34,4 +34,5 @@ web_sys = { version = "0.3.22", package = "web-sys", features = [
     "XmlHttpRequest", "XmlHttpRequestEventTarget", "MessageEvent", "ProgressEvent", "ErrorEvent", "Blob" ], optional = true  }
 serde = { version = "^1.0.59", optional = true  }
 serde_derive = { version = "^1.0.59", optional = true  }
+serde_json = { version = "^1.0.59", optional = true }
 miniquad = { version = "=0.3.0-alpha.28", features = ["log-impl"], optional = true }
