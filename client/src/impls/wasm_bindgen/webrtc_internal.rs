@@ -47,7 +47,8 @@ pub fn webrtc_initialize(
     socket_address: SocketAddr,
     msg_queue: Ref<VecDeque<Result<Option<Packet>, NaiaClientSocketError>>>,
 ) -> RtcDataChannel {
-    let server_url_str = format!("http://{}/new_rtc_session", socket_address);
+    let proxy_addr = socket_address.to_string();
+    let server_url_str = "https://muddle.run/new_rtc_session".to_owned();
 
     let peer: RtcPeerConnection = RtcPeerConnection::new().unwrap();
 
@@ -91,10 +92,12 @@ pub fn webrtc_initialize(
     onerror_callback.forget();
 
     let peer_clone = peer.clone();
+    let proxy_addr_msg = Ref::new(proxy_addr);
     let server_url_msg = Ref::new(server_url_str);
     let peer_offer_func: Box<dyn FnMut(JsValue)> = Box::new(move |e: JsValue| {
         let session_description = e.into();
         let peer_clone_2 = peer_clone.clone();
+        let proxy_addr_msg_clone = proxy_addr_msg.clone();
         let server_url_msg_clone = server_url_msg.clone();
         let peer_desc_func: Box<dyn FnMut(JsValue)> = Box::new(move |_: JsValue| {
             let request = XmlHttpRequest::new().expect("can't create new XmlHttpRequest");
@@ -107,6 +110,9 @@ pub fn webrtc_initialize(
                         err
                     )
                 });
+            request
+                .set_request_header("X-Addr", &proxy_addr_msg_clone.borrow())
+                .unwrap();
 
             let request_2 = request.clone();
             let peer_clone_3 = peer_clone_2.clone();
